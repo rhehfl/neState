@@ -1,0 +1,11 @@
+{
+  "name": "neState",
+  "packageManager": "yarn@4.9.2",
+  "scripts": {
+    "build": "tsup src/core.ts --dts --format esm,cjs --out-dir dist --clean"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  }
+}
