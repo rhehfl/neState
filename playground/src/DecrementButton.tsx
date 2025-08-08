@@ -1,8 +1,8 @@
 import { useStore } from "@ne-state";
-import { StoreContext } from "./counterStore";
+import CounterStore from "./counterStore";
 
 export default function DecrementButton() {
-  const dec = useStore(StoreContext, (s) => s.decrement);
+  const dec = useStore(CounterStore.StoreContext, (s) => s.decrement);
   return (
     <div>
       <button onClick={dec}>-1</button>
