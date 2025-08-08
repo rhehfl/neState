@@ -1,8 +1,8 @@
-import { useStore } from "@ne-state";
+import { useContextState } from "@ne-state";
 import { ThemeStore } from "./ThemeStore";
 
 export default function RenderTheme() {
-  const theme = useStore(ThemeStore.StoreContext, (s) => s.theme);
+  const theme = useContextState(ThemeStore.StoreContext, (s) => s.theme);
   return (
     <div
       style={{

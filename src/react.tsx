@@ -38,12 +38,13 @@ export function createStoreProvider<T extends object>(
   return { Provider, StoreContext };
 }
 
-export function useStore<T extends object, U>(
+export function useContextState<T extends object, U>(
   ctx: Context<StoreApi<T> | null>,
   selector: (state: T) => U
 ): U {
   const store = useContext(ctx);
   if (!store) throw new Error("useStore must be used within its Provider");
+
   return useSyncExternalStore(
     store.subscribe,
     () => selector(store.get()),

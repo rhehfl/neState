@@ -1,8 +1,8 @@
-import { useStore } from "@ne-state";
+import { useContextState } from "@ne-state";
 import CounterStore from "./counterStore";
 
 export default function RenderCount() {
-  const count = useStore(CounterStore.StoreContext, (s) => s.count);
+  const count = useContextState(CounterStore.StoreContext, (s) => s.count);
 
   return <div>{count}</div>;
 }
