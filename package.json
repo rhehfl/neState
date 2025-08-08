@@ -1,8 +1,14 @@
 {
   "name": "ne-state",
   "packageManager": "yarn@4.9.2",
+  "private": true,
+  "workspaces": [
+    "playground"
+  ],
   "scripts": {
-    "build": "tsup src/core.ts --dts --format esm,cjs --out-dir dist --clean"
+    "build": "tsup src/core.ts --dts --format esm,cjs --out-dir dist --clean",
+    "dev:app": "yarn workspace playground dev",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "react": "^19.1.0",
