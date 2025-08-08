@@ -1,66 +1,50 @@
-import {
-  createContext,
-  useContext,
-  useRef,
-  useSyncExternalStore,
-  type ReactNode,
-} from "react";
+export type StoreApi<T extends object> = {
+  get: () => T;
+  set: (partial: Partial<T> | ((state: T) => Partial<T>)) => void;
+  subscribe: (listener: () => void) => () => void;
+};
 
-type Listener = () => void;
-
-function createStore<T extends object>(initialState: T) {
+export function createStore<T extends object>(initialState: T): StoreApi<T> {
   let state = initialState;
-  const listeners = new Set<Listener>();
+  const listeners = new Set<() => void>();
 
-  const getState = () => state;
+  const get = () => state;
 
-  const setState = (partial: Partial<T> | ((prev: T) => Partial<T>)) => {
-    const nextState = typeof partial === "function" ? partial(state) : partial;
-    const prev = state;
-    state = { ...state, ...nextState };
-    if (state !== prev) listeners.forEach((l) => l());
+  const set: StoreApi<T>["set"] = (partial) => {
+    const next = typeof partial === "function" ? partial(state) : partial;
+    if (!Object.is(next, state)) {
+      state = { ...state, ...next };
+      emitChange();
+    }
   };
 
-  const subscribe = (listener: Listener) => {
+  const emitChange = () => {
+    for (let listener of listeners) {
+      listener();
+    }
+  };
+
+  const subscribe: StoreApi<T>["subscribe"] = (listener) => {
     listeners.add(listener);
     return () => listeners.delete(listener);
   };
 
-  return { getState, setState, subscribe };
+  return { get, set, subscribe };
 }
 
-function createScopedStore<T extends object>(initializer: () => T) {
-  const StoreContext = createContext<ReturnType<typeof createStore<T>> | null>(
-    null
-  );
+export function shallow<T extends object>(a: T, b: T) {
+  if (Object.is(a, b)) return true;
 
-  function Provider({ children }: { children: ReactNode }) {
-    const storeRef = useRef<ReturnType<typeof createStore<T>>>();
+  if (typeof a !== "object" || typeof b !== "object") return false;
+  if (a === null || b === null) return false;
 
-    if (!storeRef.current) {
-      const baseState = initializer();
-      storeRef.current = createStore(baseState);
+  const keysA = Object.keys(a) as (keyof T)[];
+  const keysB = Object.keys(b) as (keyof T)[];
+  if (keysA.length !== keysB.length) return false;
+  for (let key of keysA) {
+    if (!(key in b) || !Object.is(a[key], b[key])) {
+      return false;
     }
-
-    return (
-      <StoreContext.Provider value={storeRef.current}>
-        {children}
-      </StoreContext.Provider>
-    );
   }
-
-  function useStore<U>(selector: (state: T) => U): U {
-    const store = useContext(StoreContext);
-    if (!store) throw new Error("useStore must be used within a Provider");
-
-    return useSyncExternalStore(
-      store.subscribe,
-      () => selector(store.getState()),
-      () => selector(store.getState())
-    );
-  }
-
-  return { Provider, useStore };
+  return true;
 }
-
-export { createScopedStore };

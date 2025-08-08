@@ -1,5 +1,5 @@
 {
-  "name": "neState",
+  "name": "ne-state",
   "packageManager": "yarn@4.9.2",
   "scripts": {
     "build": "tsup src/core.ts --dts --format esm,cjs --out-dir dist --clean"
