@@ -2,9 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "@ne-state": ["../src"] // 루트 src 경로 지정
-    }
+    "types": ["react", "react-dom"]
   },
   "include": ["src", "vite.config.ts"]
 }

@@ -1,4 +1,4 @@
-import { createStoreProvider } from "@ne-state";
+import { createStoreProvider } from "@goooduyn/ne-state";
 type ThemeState = {
   theme: "white" | "dark";
   toggleTheme: () => void;

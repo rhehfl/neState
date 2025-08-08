@@ -1,4 +1,4 @@
-import { useContextState } from "@ne-state";
+import { useContextState } from "@goooduyn/ne-state";
 import { ThemeStore } from "./ThemeStore";
 
 export default function ThemeToggle() {

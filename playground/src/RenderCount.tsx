@@ -1,4 +1,4 @@
-import { useContextState } from "@ne-state";
+import { useContextState } from "@goooduyn/ne-state";
 import CounterStore from "./counterStore";
 
 export default function RenderCount() {
