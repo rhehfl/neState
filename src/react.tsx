@@ -21,7 +21,7 @@ export function createStoreProvider<T extends object>(
   function Provider({ children }: { children: ReactNode }) {
     const storeRef = useRef<StoreApi<T> | null>(null);
     if (!storeRef.current) {
-      let store!: StoreApi<T>;
+      let store: StoreApi<T>;
       const set: StoreApi<T>["set"] = (partial) => store.set(partial);
       const get: StoreApi<T>["get"] = () => store.get();
       store = createStore(initializer(set, get));

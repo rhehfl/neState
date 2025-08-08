@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
-import { createStoreProvider } from "@ne-state";
+import IncrementButton from "./IncrementButton";
+import { Provider } from "./counterStore";
+import DecrementButton from "./DecrementButton";
+import RenderCount from "./RenderCount";
 
 export default function App() {
-  createStoreProvider(() => {
-    return {};
-  });
   return (
     <div style={{ padding: 20 }}>
-      <h1>ne-state playground</h1>
-      <p>
-        루트 <code>src</code> 변경 → HMR 즉시 반영됩니다.
-      </p>
+      <Provider>
+        <IncrementButton />
+        <DecrementButton />
+        <RenderCount />
+      </Provider>
     </div>
   );
 }

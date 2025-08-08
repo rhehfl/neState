@@ -32,19 +32,19 @@ export function createStore<T extends object>(initialState: T): StoreApi<T> {
   return { get, set, subscribe };
 }
 
-export function shallow<T extends object>(a: T, b: T) {
-  if (Object.is(a, b)) return true;
+// export function shallow<T extends object>(a: T, b: T) {
+//   if (Object.is(a, b)) return true;
 
-  if (typeof a !== "object" || typeof b !== "object") return false;
-  if (a === null || b === null) return false;
+//   if (typeof a !== "object" || typeof b !== "object") return false;
+//   if (a === null || b === null) return false;
 
-  const keysA = Object.keys(a) as (keyof T)[];
-  const keysB = Object.keys(b) as (keyof T)[];
-  if (keysA.length !== keysB.length) return false;
-  for (let key of keysA) {
-    if (!(key in b) || !Object.is(a[key], b[key])) {
-      return false;
-    }
-  }
-  return true;
-}
+//   const keysA = Object.keys(a) as (keyof T)[];
+//   const keysB = Object.keys(b) as (keyof T)[];
+//   if (keysA.length !== keysB.length) return false;
+//   for (let key of keysA) {
+//     if (!(key in b) || !Object.is(a[key], b[key])) {
+//       return false;
+//     }
+//   }
+//   return true;
+// }
