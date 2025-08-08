@@ -1,23 +1,22 @@
 {
   "name": "@goooduyn/ne-state",
   "version": "1.0.0",
+  "description": "React Context + useSyncExternalStore lightweight state manager with selector-based partial subscriptions.",
   "license": "MIT",
   "sideEffects": false,
-  "publishConfig.access": "public",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rhehfl/neState"
+    "url": "git+https://github.com/rhehfl/neState.git"
   },
   "homepage": "https://github.com/rhehfl/neState",
   "bugs": {
@@ -29,28 +28,27 @@
   "keywords": [
     "react",
     "state",
-    "manager",
     "management",
-    "redux",
-    "zustand",
     "store",
+    "selector",
+    "zustand",
+    "redux",
+    "lightweight",
+    "performance",
     "리액트",
     "상태관리",
-    "전역상태"
+    "전역상태",
+    "부분구독"
   ],
   "files": [
     "dist",
     "README.md",
     "LICENSE"
   ],
-  "packageManager": "yarn@4.9.2",
-  "workspaces": [
-    "playground"
-  ],
   "scripts": {
-    "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist --clean --sourcemap false",
-    "dev:app": "yarn workspace playground dev",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "build": "tsup src/index.ts --dts --format esm --out-dir dist --clean --sourcemap false --minify --treeshake --target es2018",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run build"
   },
   "devDependencies": {
     "@types/react": "^19.1.8",
@@ -66,13 +64,5 @@
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": false
-    },
-    "react-dom": {
-      "optional": false
-    }
   }
 }
