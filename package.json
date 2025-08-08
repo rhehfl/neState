@@ -1,18 +1,56 @@
 {
-  "name": "ne-state",
+  "name": "@goooduyn/ne-state",
+  "version": "1.0.0",
+  "license": "MIT",
+  "sideEffects": false,
+  "publishConfig.access": "public",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rhehfl/neState"
+  },
+  "homepage": "https://github.com/rhehfl/neState",
+  "bugs": {
+    "url": "https://github.com/rhehfl/neState/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "react",
+    "state",
+    "manager",
+    "management",
+    "redux",
+    "zustand",
+    "store",
+    "리액트",
+    "상태관리",
+    "전역상태"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "packageManager": "yarn@4.9.2",
-  "private": true,
   "workspaces": [
     "playground"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist --clean",
+    "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist --clean --sourcemap false",
     "dev:app": "yarn workspace playground dev",
     "typecheck": "tsc -p tsconfig.json --noEmit"
-  },
-  "dependencies": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.8",
