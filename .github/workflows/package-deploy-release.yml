@@ -1,0 +1,54 @@
+name: Publish on tag (pnpm)
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      CI: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+          always-auth: true
+
+      # pnpm 설치 (버전 고정 가능)
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # pnpm 캐시(옵션)
+      - name: Setup pnpm store cache
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.PACKAGE_PUBLISH_KEY_NPM }}
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: pnpm-${{ runner.os }}-
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test --if-present
+      - run: pnpm build --if-present
+
+      # (옵션) package.json 버전과 태그 일치 확인
+      - name: Verify version equals tag
+        run: |
+          PKG_VER=$(node -p "require('./package.json').version")
+          TAG=${GITHUB_REF_NAME#v}
+          [[ "$PKG_VER" == "$TAG" ]] || { echo "version $PKG_VER != tag $TAG"; exit 1; }
+
+      # 배포는 npm CLI로 진행(Automation 토큰 필요)
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public
