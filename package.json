@@ -1,6 +1,6 @@
 {
   "name": "@goooduyn/ne-state",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React Context + useSyncExternalStore lightweight state manager with selector-based partial subscriptions.",
   "license": "MIT",
   "sideEffects": false,
