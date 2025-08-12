@@ -37,7 +37,7 @@ jobs:
           restore-keys: yarn-${{ runner.os }}-
 
       - name: Install (Yarn PnP)
-        run: yarn install --immutable
+        run: yarn install --immutable-cache
 
       - name: Verify version equals tag
         run: |
