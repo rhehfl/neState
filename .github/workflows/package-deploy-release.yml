@@ -1,8 +1,9 @@
-name: Publish on tag (pnpm)
+name: Publish on tag (yarn berry + npm publish)
+
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v*"
 
 jobs:
   publish:
@@ -15,40 +16,46 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node (enable Corepack for Yarn Berry)
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: "https://registry.npmjs.org"
           always-auth: true
+      - run: corepack enable
 
-      # pnpm 설치 (버전 고정 가능)
-      - uses: pnpm/action-setup@v4
+      # Yarn Berry 캐시
+      - name: Cache Yarn Berry artifacts
+        uses: actions/cache@v4
         with:
-          version: 9
+          path: |
+            .yarn/cache
+            .yarn/unplugged
+            .yarn/build-state.yml
+            .yarn/install-state.gz
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
 
-      # pnpm 캐시(옵션)
-      - name: Setup pnpm store cache
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
-      - uses: actions/cache@v4
-        with:
-          path: ${{ env.PACKAGE_PUBLISH_KEY_NPM }}
-          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: pnpm-${{ runner.os }}-
+      - name: Install (Yarn PnP)
+        run: yarn install --immutable
 
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm test --if-present
-      - run: pnpm build --if-present
-
-      # (옵션) package.json 버전과 태그 일치 확인
       - name: Verify version equals tag
         run: |
           PKG_VER=$(node -p "require('./package.json').version")
           TAG=${GITHUB_REF_NAME#v}
-          [[ "$PKG_VER" == "$TAG" ]] || { echo "version $PKG_VER != tag $TAG"; exit 1; }
+          [ "$PKG_VER" = "$TAG" ] || { echo "version $PKG_VER != tag $TAG"; exit 1; }
 
-      # 배포는 npm CLI로 진행(Automation 토큰 필요)
-      - name: Publish
+      - name: Typecheck & Build
+        run: |
+          yarn typecheck
+          yarn build
+
+      - name: npm whoami (sanity)
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --provenance --access public
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGE_PUBLISH_KEY_NPM }} # Automation 토큰
+        run: npm whoami
+
+      - name: Publish to npm (skip npm life-cycle scripts)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGE_PUBLISH_KEY_NPM }} # Automation 토큰
+        run: npm publish --provenance --access public --ignore-scripts
