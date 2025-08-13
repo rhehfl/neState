@@ -1,14 +1,4 @@
-
-
-# Whether you use PnP or not, the node_modules folder is often used to store
-# build artifacts that should be gitignored
-node_modules
-
-# Swap the comments on the following lines if you wish to use zero-installs
-# In that case, don't forget to run `yarn config set enableGlobalCache false`!
-# Documentation here: https://yarnpkg.com/features/caching#zero-installs
-
-# Yarn Berry
+# Yarn Berry (기본 무시 + 필요한 것만 예외)
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
@@ -16,14 +6,16 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 
-# 캐시/빌드 상태/언플러그는 올리지 않음
+# Yarn 캐시/언플러그 상태 파일
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
 .yarn/install-state.gz
 
+# (중요) 루트에 생긴 구버전/잔여 폴더도 같이 무시
+cache/
+unplugged/
+install-state.gz
 
-
-#build artifacts
-dist    
-
+# build artifacts
+dist
