@@ -8,16 +8,20 @@ node_modules
 # In that case, don't forget to run `yarn config set enableGlobalCache false`!
 # Documentation here: https://yarnpkg.com/features/caching#zero-installs
 
+# Yarn Berry
 .yarn/*
-!.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# 캐시/빌드 상태/언플러그는 올리지 않음
+.yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
 .yarn/install-state.gz
+
 
 
 #build artifacts

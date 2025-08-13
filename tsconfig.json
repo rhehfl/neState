@@ -1,14 +1,4 @@
 {
-  "compilerOptions": {
-    "target": "ES2018",
-    "module": "ESNext",
-    "declaration": false,
-    "emitDeclarationOnly": false,
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "jsx": "react-jsx",
-    "noEmit": true,
-    "types": ["react", "react-dom"]
-  },
-  "include": ["src"]
+  "files": [],
+  "references": [{ "path": "./playground" }]
 }
